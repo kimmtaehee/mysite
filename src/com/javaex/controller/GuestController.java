@@ -29,7 +29,7 @@ public class GuestController extends HttpServlet {
 		System.out.println(action);
 		
 		if("addList".equals(action)) { //방명록
-			System.out.println("[GuestController.addList.jsp]");
+			System.out.println("[리스트]");
 			
 			//addList
 			GuestDao guestDao = new GuestDao();
@@ -41,12 +41,13 @@ public class GuestController extends HttpServlet {
 			//방명록 포워드
 			WebUtil.forward(request, response, "/WEB-INF/views/guestbook/addList.jsp");
 		}else if("add".equals(action)) {
+			System.out.println("[추가]");
 			
 			//add
 			GuestDao guestDao = new GuestDao();
 			
 			String name = request.getParameter("name");
-			String password = request.getParameter("password");
+			String password = request.getParameter("pass");
 			String content = request.getParameter("content");
 			
 			GuestVo guestVo = new GuestVo(name, password, content);
@@ -56,7 +57,7 @@ public class GuestController extends HttpServlet {
 			WebUtil.redirect(request, response, "/mysite/Guest?action=addList");
 			
 		}else if("deleteForm".equals(action)) {
-			System.out.println("[GuestController.deleteForm.jsp]");
+			System.out.println("[삭제폼]");
 			
 			//방명록 삭제 포워드
 			WebUtil.forward(request, response, "/WEB-INF/views/guestbook/deleteForm.jsp");
@@ -70,10 +71,13 @@ public class GuestController extends HttpServlet {
 
 			int no = Integer.parseInt(request.getParameter("no"));
 			
-			String password = request.getParameter("password");
+			String password = request.getParameter("pass");
 			guestDao.guestDelete(no, password);
 			
-			WebUtil.forward(request, response, "/mysite/Guest?action=addList");
+			//김태희 반성.................................
+			WebUtil.redirect(request, response, "/mysite/Guest?action=addList");
+			//실행 후 다시 돌아와는거(새로고침)
+			//포워드 폼처럼 들어가는거(정보보내는거)
 		}
 		
 	}

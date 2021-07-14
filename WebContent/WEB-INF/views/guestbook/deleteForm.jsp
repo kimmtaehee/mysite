@@ -74,7 +74,7 @@
 				<!-- //content-head -->
 	
 				<div id="guestbook">
-					<form action="/mysite/Guest" method="get">
+					<form action="/mysite/Guest" method="">
 						<table id="guestDelete">
 							<colgroup>
 								<col style="width: 10%;">
