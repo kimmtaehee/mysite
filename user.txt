@@ -1,0 +1,39 @@
+--user테이블 삭제
+drop table users;
+
+--user 시퀸스 삭제
+drop sequence seq_user_no;
+
+--user 테이블 생성
+CREATE TABLE users (
+      no NUMBER,
+      id	 VARCHAR2(20) unique NOT NULL,
+      password VARCHAR2(20)not null,
+      name VARCHAR2(20),
+      gender VARCHAR2(10),
+      primary key(no)
+);
+
+--user 시퀀스 생성
+create sequence seq_user_no
+increment by 1
+start with 1
+nocache;
+
+--insert문
+insert into users
+values(
+    seq_user_no.nextval,
+    'kthd98',
+    '1234',
+    '김태희',
+    'female'
+);
+
+--select문
+SELECT
+    *
+FROM users;
+
+--롤백
+rollback;
