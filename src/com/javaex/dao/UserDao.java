@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import com.javaex.vo.UserVo;
 
 public class UserDao {
-   
+	
    //필드
    //0. import java.sql.*;
    private Connection conn = null;
@@ -89,5 +89,127 @@ public class UserDao {
       return count;
       
    }
+   
+   
+   //유저 1명 정보 가져오기
+   public UserVo getUser(String id, String pw) {
+      
+      UserVo userVo = null;
+      
+      // 0. import java.sql.*;
+      Connection conn = null;
+      PreparedStatement pstmt = null;
+      ResultSet rs = null;
 
-}
+      try {
+          // 1. JDBC 드라이버 (Oracle) 로딩
+         Class.forName("oracle.jdbc.driver.OracleDriver");
+
+
+          // 2. Connection 얻어오기
+         String url = "jdbc:oracle:thin:@localhost:1521:xe";
+         conn = DriverManager.getConnection(url, "webdb", "webdb");
+
+          // 3. SQL문 준비 / 바인딩 / 실행
+         String query = "";
+         query += " select no, id, password ,name, gender "; 
+         query += " from users ";
+         query += " where id = ? ";
+         query += " and password = ? ";
+         
+         System.out.println(query);
+         
+         pstmt = conn.prepareStatement(query);
+         pstmt.setString(1, id);
+         pstmt.setString(2, pw);
+         
+         rs = pstmt.executeQuery();
+          
+          // 4.결과처리
+         while(rs.next()) {
+            int no = rs.getInt("no");
+            String uId = rs.getNString("id");
+            String password = rs.getNString("password");
+            String name = rs.getString("name");
+            String gender = rs.getString("gender");
+            
+            //생성자가 없는경우 setter 이용할 수 있다.
+            userVo = new UserVo(no, uId, password ,name, gender);
+            //userVo.setno(no);
+            //userVo.setName(name);
+         }
+
+      } catch (ClassNotFoundException e) {
+          System.out.println("error: 드라이버 로딩 실패 - " + e);
+      } catch (SQLException e) {
+          System.out.println("error:" + e);
+      } finally {
+         
+          // 5. 자원정리
+          try {
+              if (rs != null) {
+                  rs.close();
+              }                
+              if (pstmt != null) {
+                  pstmt.close();
+              }
+              if (conn != null) {
+                  conn.close();
+              }
+          } catch (SQLException e) {
+              System.out.println("error:" + e);
+          }
+          
+      }
+
+      return userVo;
+    	  
+      }
+   
+   public int userModify(UserVo userVo) {
+      
+	      int count = -1;
+	      getConnection();
+	      
+	      try {
+
+				// 3. SQL문 준비 / 바인딩 / 실행
+				String query = ""; // 쿼리문 문자열만들기, ? 주의
+				query += " update users ";
+				query += " set password = ? , ";
+				query += "     name = ? , ";
+				query += "     gender = ? ";
+				query += " where no = ? ";
+
+				pstmt = conn.prepareStatement(query); // 쿼리로 만들기
+
+				pstmt.setString(1, userVo.getPw()); // ?(물음표) 중 1번째, 순서중요
+				pstmt.setString(2, userVo.getName()); // ?(물음표) 중 2번째, 순서중요
+				pstmt.setString(3, userVo.getGender()); // ?(물음표) 중 3번째, 순서중요
+				pstmt.setInt(4, userVo.getno()); // ?(물음표) 중 4번째, 순서중요
+
+				count = pstmt.executeUpdate(); // 쿼리문 실행
+
+				// 4.결과처리
+				// System.out.println(count + "건 수정되었습니다.");
+
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			}
+
+			close();
+			return count;
+		}
+   }
+
+
+
+
+
+
+
+
+
+
+
+
