@@ -59,7 +59,7 @@ public class GuestController extends HttpServlet {
 		}else if("deleteForm".equals(action)) {
 			System.out.println("[삭제폼]");
 			
-			//방명록 삭제 포워드
+			//방명록 삭제 포워드 ( 폼처럼 들어가는거(정보보내는거) )
 			WebUtil.forward(request, response, "/WEB-INF/views/guestbook/deleteForm.jsp");
 			
 		}else if("delete".equals(action)) {
@@ -74,10 +74,10 @@ public class GuestController extends HttpServlet {
 			String password = request.getParameter("pass");
 			guestDao.guestDelete(no, password);
 			
-			//김태희 반성.................................
-			WebUtil.redirect(request, response, "/mysite/Guest?action=addList");
 			//실행 후 다시 돌아와는거(새로고침)
-			//포워드 폼처럼 들어가는거(정보보내는거)
+			WebUtil.redirect(request, response, "/mysite/Guest?action=addList");
+			
+			
 		}
 		
 	}
