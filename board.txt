@@ -1,0 +1,46 @@
+--person 테이블 삭제
+drop table board;
+
+--person 시퀀스 삭제
+drop sequence seq_board_no;
+
+--person 테이블 생성
+create table board(
+    no number,
+    title  varchar2(500) not null,
+    content varchar2(4000),
+    hit number default 0 ,
+    reg_date        date not null,
+    user_no number not null,
+    primary key(no),
+    constraint board_fk foreign key (user_no)
+    references users(no)
+);
+
+
+CREATE SEQUENCE seq_board_no
+INCREMENT BY 1 
+START WITH 1
+nocache;
+
+
+insert into board(no,title, content, reg_date, user_no) values(seq_board_no.nextval, '게시글입니다', '김태희', sysdate, 1);
+insert into board(no,title, content, reg_date, user_no) values(seq_board_no.nextval, '게시글입니다', '김태태', sysdate, 2);
+
+select  no ,
+        title,
+        content,
+        hit,
+        reg_date,
+        user_no
+from board;
+
+commit;
+
+SELECT  b.no,
+        b.title,
+        u.name,
+        b.hit,
+        b.reg_date
+FROM board b,users u
+where b.user_no = u.no;
