@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.javaex.vo.BoardVo;
-import com.javaex.vo.PersonVo;
 
 public class BoardDao {
 
@@ -20,8 +19,8 @@ public class BoardDao {
 
 		private String driver = "oracle.jdbc.driver.OracleDriver";
 		private String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		private String id = "phonedb";
-		private String pw = "phonedb";
+		private String id = "webdb";
+		private String pw = "webdb";
 
 		private void getConnection() {
 			try {
@@ -102,6 +101,7 @@ public class BoardDao {
 					
 					BoardVo boardVo = new BoardVo(no, title, hit, reg_date, name);
 					boardList.add(boardVo);
+					
 				}
 
 			} catch (SQLException e) {
@@ -119,6 +119,4 @@ public class BoardDao {
 			
 			
 			
-		}
-	
-}
+	}
